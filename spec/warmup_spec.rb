@@ -9,16 +9,11 @@ describe "warmup tests"  do
       double( size: 3 )
     end
 
-    let(:some_string) {  "tetris"  } 
-
-    let(:loud_string) {  some_string }
-
     describe "#get_shout" do
 
         it "takes a string and returns uppercase" do
             allow(warmup).to receive(:gets).and_return("shout")
             expect { warmup.gets_shout }.to output("SHOUT\n").to_stdout
-            # expect(warmup.gets_shout).to eq("SHOUT")
         end
 
     end
@@ -35,6 +30,9 @@ describe "warmup tests"  do
   
 
     describe "#calls_some_methods" do
+      let(:some_string) {  "tetris"  } 
+
+      let(:loud_string) {  some_string }
 
       it "ensures that upcase! is called" do
         expect(some_string).to receive(:upcase!).and_return("TETRIS")
@@ -51,7 +49,6 @@ describe "warmup tests"  do
         allow(some_string).to receive(:upcase!).and_return(loud_string)
         expect(warmup.calls_some_methods(some_string)).not_to eq("SIRTET")
       end
-
     end
 
 end
