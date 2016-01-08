@@ -4,49 +4,46 @@ require_relative '../lib/viking'
 
 describe "Viking"  do 
     
-    let(:lars){Viking.new("Lars", 80)}
+    let (:random_weapon) { Weapon.new("random") }
+
+    let( :viking_with_weapon )  do
+        Viking.new("Lars", 80, 55, random_weapon)
+    end
 
     describe "initialize" do
-
       it "assigns name when instantiated" do
-        expect(lars.name).to eq("Lars")
+        expect(Viking.new.name).to eq("RandomViking")
       end
 
       it "assigns health when instantiated" do
-        expect(lars.health).to eq(80)
+        expect(Viking.new.health).to eq(100)
       end
 
       it "weapon is default to nil" do
-        expect(lars.weapon).to eq(nil)
+        expect(Viking.new.weapon).to eq(nil)
       end
-
     end
 
     describe "can't overwrite health" do
       it "Once assigned health cannot be overwritten" do
-        expect{lars.health = 200}.to raise_error NoMethodError
+        expect{viking_with_weapon.health = 200}.to raise_error NoMethodError
       end
     end
 
-    describe "pick up weapon" do
+    describe "#pick up weapon" do
       
       it "assigns weapon to viking" do
-        random_weapon = Weapon.new("random")
-        lars.pick_up_weapon(random_weapon)
-        expect(lars.weapon).to eq(random_weapon)
+        expect(viking_with_weapon.weapon).to eq(random_weapon)
       end
 
       it "assigns new weapon to viking" do
-        random_weapon = Weapon.new("random")
-        lars.pick_up_weapon(random_weapon)
         other_weapon = Weapon.new("other")
-        lars.pick_up_weapon(other_weapon)
-        expect(lars.weapon).not_to eq(random_weapon)
+        viking_with_weapon.pick_up_weapon(other_weapon)
+        expect(viking_with_weapon.weapon).not_to eq(random_weapon)
       end
 
       it "doesn't allow non weapons to be assigned" do
-        random_viking = Viking.new
-        expect{lars.pick_up_weapon(random_viking)}.to raise_error "Can't pick up that thing"
+        expect{viking_with_weapon.pick_up_weapon(Viking.new)}.to raise_error "Can't pick up that thing"
       end
 
     end
@@ -54,15 +51,24 @@ describe "Viking"  do
     describe "drop a weapon" do
 
       it "dropping a weapon, makes viking weaponless" do
-        random_weapon = Weapon.new("random")
-        lars.pick_up_weapon(random_weapon)
-        lars.drop_weapon
-        expect(lars.weapon).to eq(nil)
+        viking_with_weapon.drop_weapon
+        expect(viking_with_weapon.weapon).to eq(nil)
       end
     end
 
-    describe "" do
+    describe "#receive_attack" do
 
+        it "reduces viking's health by specified amount" do 
+            viking_with_weapon.receive_attack(20)
+            expect(viking_with_weapon.health).to eq(60)
+        end
+
+        it "recieving attack calls take_damage" do 
+            expect(viking_with_weapon).to receive(:take_damage)
+            viking_with_weapon.receive_attack(20)
+        end
 
     end
 end
+
+
