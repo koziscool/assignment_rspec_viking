@@ -1,6 +1,9 @@
 # Your code here
 
 require_relative '../lib/viking'
+require_relative '../lib/weapons/weapon'
+require_relative '../lib/weapons/fists'
+
 
 describe "Viking"  do 
     
@@ -92,6 +95,40 @@ describe "Viking"  do
           expect(olaf).to receive(:damage_with_fists).and_return(2)
           olaf.attack(viking_with_weapon)
       end
+
+       it "attacking without weapon gives damage with fist" do
+          
+          a_fist = Fists.new
+          multiplier = a_fist.use
+          damage = -olaf.strength * multiplier
+          expect{ olaf.attack(viking_with_weapon) }.to change(viking_with_weapon, :health).by(damage)
+      end
+
+      it "attacking without weapon gives damage with fist" do
+          expect(viking_with_weapon).to receive(:damage_with_weapon).and_return(2)
+          viking_with_weapon.attack(olaf)
+      end
+
+       it "attacking with weapon gives damage with fist" do
+          
+          multiplier = viking_with_weapon.weapon.use
+          damage = -viking_with_weapon.strength * multiplier
+          expect{ viking_with_weapon.attack(olaf) }.to change(olaf, :health).by(damage)
+      end
+
+        it "attacking without weapon gives damage with fist" do
+          expect(viking_with_weapon).to receive(:damage_with_fists).and_return(2)
+          viking_with_weapon.pick_up_weapon( Bow.new(0) )
+          viking_with_weapon.attack(olaf)
+      end
+
+    end
+
+    describe "#check_death" do
+        it " " do 
+            expect { viking_with_weapon.receive_attack(10000000) }.to raise_error "#{viking_with_weapon.name} has Died..."
+        end
+
     end
 
 
