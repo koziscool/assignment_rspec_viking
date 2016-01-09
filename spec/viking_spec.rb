@@ -10,6 +10,10 @@ describe "Viking"  do
         Viking.new("Lars", 80, 55, random_weapon)
     end
 
+    let( :olaf ) do
+      Viking.new("Olaf", 90, 55, nil)
+    end
+
     describe "initialize" do
       it "assigns name when instantiated" do
         expect(Viking.new.name).to eq("RandomViking")
@@ -30,7 +34,7 @@ describe "Viking"  do
       end
     end
 
-    describe "#pick up weapon" do
+    describe "#pick_up_weapon" do
       
       it "assigns weapon to viking" do
         expect(viking_with_weapon.weapon).to eq(random_weapon)
@@ -48,7 +52,7 @@ describe "Viking"  do
 
     end
 
-    describe "drop a weapon" do
+    describe "#drop_weapon" do
 
       it "dropping a weapon, makes viking weaponless" do
         viking_with_weapon.drop_weapon
@@ -69,6 +73,30 @@ describe "Viking"  do
         end
 
     end
+
+    describe "#attack" do
+
+      it "reduces viking's health by specified amount" do 
+          before = olaf.health
+          viking_with_weapon.attack(olaf)
+          after = olaf.health
+          expect(before).to be >(after)
+      end
+
+      it "attack calls take_damage on other viking" do 
+          expect(olaf).to receive(:take_damage)
+          viking_with_weapon.attack(olaf)
+      end
+
+      it "attacking without weapon gives damage with fist" do
+          puts :damage_with_fists.inspect
+          expect(olaf).to receive(:damage_with_fists)
+          olaf.attack(viking_with_weapon)
+      end
+
+    end
+
+
 end
 
 
