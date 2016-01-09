@@ -89,11 +89,9 @@ describe "Viking"  do
       end
 
       it "attacking without weapon gives damage with fist" do
-          puts :damage_with_fists.inspect
-          expect(olaf).to receive(:damage_with_fists)
+          expect(olaf).to receive(:damage_with_fists).and_return(2)
           olaf.attack(viking_with_weapon)
       end
-
     end
 
 
